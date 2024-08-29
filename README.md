@@ -1,7 +1,5 @@
 # Digital-Door-Lock-System-using-8051-Microcontroller
 
-
-
 ## OverView
 Welcome to the Digital Door Lock System project! This advanced security system employs a keypad for secure password entry and an LCD for clear status updates. The project is designed to offer a sophisticated, user-friendly solution for access control, leveraging EEPROM memory to retain password integrity and servo motors for physical engagement of the lock mechanism. Our goal is to enhance security measures and provide peace of mind through a reliable and efficient digital door lock system.
 
