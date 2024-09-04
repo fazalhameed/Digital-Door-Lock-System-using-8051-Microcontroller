@@ -1,13 +1,11 @@
 # include <reg52.h>
 # include "LCD.h"
 # include "Keypad.h"
+#define LCD_DATAPORT P0
 
-
-#define LCD_DATAPORT P0                         
 sbit RW=P2^5;                                    
 sbit RS=P2^6;                                    
 sbit EN=P2^7;                                   
-
 sbit DB4=P0^4;                               
 sbit DB5=P0^5;
 sbit DB6=P0^6;
@@ -122,11 +120,6 @@ void LCD_Clear()
  { 
       LCD_Command(0x01);
  }
- 
-
- 
-
- 
  int lcd_Pow(int X,int Y)
 {
 	unsigned char i;
@@ -137,8 +130,6 @@ void LCD_Clear()
 	}
 	return Result;
 }
-
-
 
 //Set Cursor, Passing Number and its Length,
 void LCD_ShowNum(unsigned char Line,unsigned char Column,unsigned int Number,unsigned char Length)
@@ -151,14 +142,11 @@ void LCD_ShowNum(unsigned char Line,unsigned char Column,unsigned int Number,uns
 	}
 }
 
-
 void LCD_ShowChar(unsigned char Line,unsigned char Column,unsigned char Char)
 {
 	Set_cursor(Line,Column);
 	LCD_Data(Char);
 }
-
-
 
 void LCD_ShowString(unsigned char Line,unsigned char Column,char *String)
 {
