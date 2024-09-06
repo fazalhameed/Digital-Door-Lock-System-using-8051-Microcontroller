@@ -3,22 +3,17 @@
 # include <intrins.h>
 # include "LCD.h"
 # include "Keypad.h"
-
-
 sbit SDA= P2^0;
 sbit SCL= P2^1;
+
 unsigned char a,b,Data;
 bit ack;
-
-
 void Delay_ms(unsigned int x)       
 {	   
 	unsigned int y,z;
 		for(y=0;y<=x;y++)
 	    	for(z=0;z<=113;z++);
 }
-
-
 void Start_Data ()              
 { 
 	SDA=1;                          
@@ -68,9 +63,7 @@ void SendByte (unsigned int Value)
 	  SCL=0;
     SDA=(Value&(0x80>>a))?1:0;                  //Send the MSB first
     SCL=1;
-	}
-
-	
+	}	
 }
 
 unsigned char ReadByte ()                  
