@@ -1,13 +1,10 @@
 # include <reg52.h>
 # include "LCD.h"
 # include "Keypad.h"
-
-
 sbit C1=P1^3;
 sbit C2=P1^2;
 sbit C3=P1^1;
-sbit C4=P1^0;
-                                                              
+sbit C4=P1^0;                                                              
 sbit R1=P1^7;
 sbit R2=P1^6;
 sbit R3=P1^5;
