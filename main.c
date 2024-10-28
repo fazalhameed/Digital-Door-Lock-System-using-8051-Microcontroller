@@ -19,44 +19,40 @@ unsigned char second=10,Flag=0,data_read,flag1=0;
 unsigned char  OLD_Password[6];
 unsigned char old_PIN,key ;
 
-
 unsigned int  ON_Period, OFF_Period;
 sbit Servomotor_Pin = P2^0;
-
 
 //Servo Motor Setup
 void Timer0_Intilization ()     
 {
   TMOD =0x01;
-	TH0=0xB7;
-	TL0=0xFD;
-	
-	IE=0x82;
-	TR0=1;
+  TH0=0xB7;
+  TL0=0xFD;
+  IE=0x82;
+  TR0=1;
 	
 }
 
 void Timer0 () interrupt 1       
 { 
-	Servomotor_Pin = ~Servomotor_Pin ;	
-	if(Servomotor_Pin)
-	   {
-		   TH0=ON_Period >> 8;
-			 TL0=ON_Period;
-		 }
-		 else
-	   {
-		   TH0=OFF_Period >> 8;
-			 TL0=OFF_Period;
-		 }
+  Servomotor_Pin = ~Servomotor_Pin ;	
+  if(Servomotor_Pin)
+  {
+   TH0=ON_Period >> 8;
+   TL0=ON_Period;
+    }
+     else
+     {
+	TH0=OFF_Period >> 8;
+        TL0=OFF_Period;
+	}
 }
-
 void Set_Duty_Cycle (float angle)            
 { 
 	float duty_cycle ;
 	unsigned int Period;
-	 duty_cycle = (angle / 180.0) * 10.0 ; 
-  Period =65535 - 0xB7FD ;
+	duty_cycle = (angle / 180.0) * 10.0 ; 
+        Period =65535 - 0xB7FD ;
 	ON_Period =((Period/100.0)*duty_cycle);
 	OFF_Period = Period -ON_Period;
 	ON_Period =  65535-ON_Period;
@@ -72,63 +68,62 @@ void RandomPassword ()
 
 void main (void)                              
 {  
-  	unsigned char current_state;    
+  	  unsigned char current_state;    
 	  LCD_Intialization();                       
 	  Timer0_Intilization ();                     
-    current_state = Generate_Password;       
+          current_state = Generate_Password;       
 	
-	         // Intially set servo motor to 0 degree
-	while(1)                                     
+ // Intially set servo motor to 0 degree
+while(1)                                     
   {
     switch (current_state)                        //State Machine
 		{
-				case  Generate_Password :                 
-				Value=EEPROM_Read (0xAA);                   
+		case  Generate_Password :                 
+		Value=EEPROM_Read (0xAA);                   
                                                    
-		     	if(Value==0xAA)                            
-			   {  
-					 LCD_ShowString(1,0,"Generate Pin") ;
-					 if(j<6)                                 
-			       { RandomPassword (); j++; }              
-			     else
-					   {   EEPROM_Write (207,0xAA);           
-						     current_state = Enter_Password;    
-						     Timmer_Delay(3000);                
-						 }
-				 }
-				 else                                       
-				 {
-				   current_state = Enter_Password;          //State Change to Enter password state
-				 }
+		if(Value==0xAA)                            
+		{  
+		LCD_ShowString(1,0,"Generate Pin") ;
+		if(j<6)                                 
+		 { RandomPassword (); j++; }              
+		 else
+		  {   EEPROM_Write (207,0xAA);           
+		      current_state = Enter_Password;    
+		      Timmer_Delay(3000);                
+		}
+	 }
+		 else                                       
+		{
+		current_state = Enter_Password;          //State Change to Enter password state
+		 }
 			
 	         break;
-			
-			
-       case  Enter_Password :                               //Case 02 Enter Password State			 
-	     LCD_Clear();                                     
-					data_read= EEPROM_Read (254);                  //EEPROM memory 254 read in orde to check the number of Wrong input
+				
+         case  Enter_Password :                               //Case 02 Enter Password State			 
+	  LCD_Clear();                                     
+	  data_read= EEPROM_Read (254);                  //EEPROM memory 254 read in order to check the number of Wrong input
 		 
           if(data_read!=6)                                 
 	 {     
-			for(i=0;i<6;i++)
-		  {   
+		      for(i=0;i<6;i++)
+		      {   
 			  Password[i]=EEPROM_Read (i);              
 			}
 			  //Extract password
 			EEPROM_Password=(Password[5]*100000)+(Password[4]*10000)+(Password[3]*1000)+(Password[2]*100)+(Password[1]*10)+(Password[0]);
 			
 			LCD_ShowString(1,0,"Enter Password") ;
-			
 			//User Enter 6 Digit password
 			for(i=0;i<6;i++)
-		  {   key=Key_Pressed();          
+		  {     key=Key_Pressed();          
 				
 				  if(key=='c')                 //if the Button is press for long time 10 second So it will change the state to New Password State 
 				     { 
-						    current_state = New_Password; break;  
-						 }
+					current_state = New_Password; break;  
+					 }
 					 else 
-					 {User_Password[i]= key;}           
+					 {
+					   User_Password[i]= key;}           
 				       
 				LCD_ShowChar( 2,i,User_Password[i]);
 			}			
@@ -148,7 +143,7 @@ void main (void)
 				LCD_ShowString(1,0,"Door Unlocked") ;   
 				Beep(5);                         
 				Delay(1000);
-			  Set_Duty_Cycle(0.0);            
+			    Set_Duty_Cycle(0.0);            
 				Delay(500);
 				for(i=0;i<10;i++)                 
 			    { second--;
@@ -170,20 +165,18 @@ void main (void)
 	}
 		 
 	else                            //if number of wrong password is more than 5  
-		 {
-			 LCD_ShowString(1,0,"System Disabled");      //System Disabled and Beep for long
-		   Beep(5000);
-		 }
+	 {
+	   LCD_ShowString(1,0,"System Disabled");      //System Disabled and Beep for long
+	   Beep(5000);
+	 }
 		 
-		 	 
-		 break;
-		 
-      case  Wrong_Password  :                    //Case 03 Wrong password State
+	 break;
+			case  Wrong_Password  :                    //Case 03 Wrong password State
 			
 			if(Flag<5)                           
 			{ 
 				LCD_Clear();	
-			  LCD_ShowString(1,0,"Wrong Password");   
+			        LCD_ShowString(1,0,"Wrong Password");   
 				LCD_ShowNum(2,5,Flag,1);
 				Beep(10); 
 				Flag++;                            
@@ -194,7 +187,7 @@ void main (void)
 			{
 				EEPROM_Write(250,6);           
 				LCD_Clear();
-			  LCD_ShowString(1,0,"System Disabled");    
+			        LCD_ShowString(1,0,"System Disabled");    
 				Beep(5000);
 			}
 						 			
@@ -204,7 +197,7 @@ void main (void)
       case  New_Password :                         //Case 03 Change Password State
 	
       LCD_Clear();
-			LCD_ShowString(1,0,"Enter Old Pin");      
+      LCD_ShowString(1,0,"Enter Old Pin");      
 
        for(i=0;i<6;i++)          
 		  {   
@@ -226,15 +219,15 @@ void main (void)
 			
 			if(old_PIN==EEPROM_Pass)
 		   	 {  
-					 EEPROM_Write (212,0xFF);   //EEPROM Memory back chage to 0xFF 
-           LCD_Clear();	
-				   current_state = Generate_Password;
-					 break;  
-				 }
-				 else                 
-				 {
-					 
-					 if(flag1<3)        
+			   EEPROM_Write (212,0xFF);   //EEPROM Memory back chage to 0xFF 
+                           LCD_Clear();	
+			   current_state = Generate_Password;
+		 break;  
+			 }
+			 else                 
+			 {
+				 
+				 if(flag1<3)        
 			      { 
 			      	LCD_Clear();	
 			        LCD_ShowString(1,0,"Wrong Password");      
@@ -246,10 +239,10 @@ void main (void)
 		        	}
 		      	else             
 			       {
-			        	EEPROM_Write(250,6);          
-							  LCD_Clear();
-			          LCD_ShowString(1,0,"System Disabled");      //Show Syatem disabled 
-			         	Beep(5000);
+			        EEPROM_Write(250,6);          
+           			LCD_Clear();
+			        LCD_ShowString(1,0,"System Disabled");      //Show Syatem disabled 
+			        Beep(5000);
 			       }
 				 }
 			
