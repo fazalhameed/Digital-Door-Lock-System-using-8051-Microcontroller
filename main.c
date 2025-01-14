@@ -29,8 +29,7 @@ void Timer0_Intilization ()
   TH0=0xB7;
   TL0=0xFD;
   IE=0x82;
-  TR0=1;
-	
+  TR0=1;	
 }
 
 void Timer0 () interrupt 1       
@@ -57,7 +56,6 @@ void Set_Duty_Cycle (float angle)
 	OFF_Period = Period -ON_Period;
 	ON_Period =  65535-ON_Period;
 	OFF_Period=  65535-OFF_Period;
-
 }
 void RandomPassword ()                        
 { 		
