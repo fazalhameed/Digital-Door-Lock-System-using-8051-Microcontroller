@@ -21,8 +21,7 @@ void Start_Data ()
   SCL=1;
   _nop_();_nop_();
 	SDA=0;
-  _nop_();_nop_();
-	
+  _nop_();_nop_();	
 }
 void Restart ()                         
 {
@@ -36,8 +35,7 @@ void Stop_Data ()
   SCL=0;                                  
 	SDA=0;
   SCL=1;
-	SDA=1;
-	
+	SDA=1;	
 }
 
 void aknowledge()	                   
@@ -47,17 +45,14 @@ void aknowledge()
 	SCL=1;
 	while(SDA);
 }
-
 void NO_aknowledge()	             
 {
 	SCL=0;
 	SDA=1;
 	SCL=1;
 }
-
 void SendByte (unsigned int Value)             
-{
-	  
+{  
 	 for(a=0;a<8;a++)
 	{ 	
 	  SCL=0;
@@ -69,18 +64,15 @@ void SendByte (unsigned int Value)
 unsigned char ReadByte ()                  
 {  
       Data=0;
-	
 	for(b=0;b<8;b++)
 	{	 
    SCL=0;
    SCL=1;
    if(SDA)
     Data|=(0x80>>b);	                        //Send the MSB first	
-	}
-	  
+	}	  
 	 return Data;
 }
-
 
 void EEPROM_Write (unsigned char address_W ,unsigned char Data)    // EEPROM Write Function
 {
@@ -94,7 +86,6 @@ void EEPROM_Write (unsigned char address_W ,unsigned char Data)    // EEPROM Wri
 	Stop_Data () ;               //Stop Data Transfer
 	Delay_ms(10);                 // Small Delay
 }
-
 
 unsigned char EEPROM_Read (unsigned char address_R)                 // EEPROM Read fdunction
 {  
@@ -113,6 +104,5 @@ unsigned char EEPROM_Read (unsigned char address_R)                 // EEPROM Re
 	
 return Data;                            //Return the data stored in Temporary Register
 }
-
 
 
